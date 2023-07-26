@@ -53,6 +53,15 @@
     <asp:ObjectDataSource ID="odsPATENTES" runat="server" SelectMethod="traerpatentes" TypeName="DAL.Patentes"></asp:ObjectDataSource>
     <asp:Button ID="btnguardarcambios" runat="server" OnClick="btnguardarcambios_Click" Text="Guardar" />
     <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+    <br />
         
 </asp:Content>
 

@@ -20,10 +20,11 @@ namespace WebApplication10
         BLL.Patentes permisos;
         protected void Page_Load(object sender, EventArgs e)
         {
+            //this.ComboBox1.DataSource = permisos.GetAllFamilias();
 
         }
 
-       
+        
         public void usuarios()
         {
             int id1;

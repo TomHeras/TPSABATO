@@ -12,34 +12,58 @@ namespace WebApplication10
     public partial class Permisos : System.Web.UI.Page
     {
         BLL.Patentes GestorPatentes = new BLL.Patentes();
-        Familia flia =new Familia();
+        Familia flia=new Familia();
         Patente pat = new Patente();
 
 
-
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //listarfliaspat();
-            
+
         }
 
+
+        void MostrarTreeView(TreeNode padre, Componente c)
+        {
+            TreeNode hijo = new TreeNode(c.Nombre);
+            hijo.ToolTip = c.Nombre;
+            padre.ChildNodes.Add(hijo);
+
+            foreach (var item in c.Hijos)
+            {
+                MostrarTreeView(hijo, item);
+            }
+        }//////////////////////////////
+
+        void MostrarPermisos(Patente_Usuario u)
+        {
+            this.TreeView1.Nodes.Clear();
+            TreeNode root = new TreeNode(u.Nombre);
+
+            foreach (var item in u.Permisos)
+            {
+                MostrarTreeView(root, item);
+            }
+
+            this.TreeView1.Nodes.Add(root);
+            this.TreeView1.ExpandAll();
+        }
         protected void Btnguardarpermiso_Click(object sender, EventArgs e)
         {
 
-        
 
 
             Patente p = new Patente()
             {
                 Nombre = this.Txtpatentes.Text,
-                Permiso = (Tipopatente)this.ddlpatentescompo.SelectedIndex
+                
             };
 
             GestorPatentes.guardarcomponente(p, false);
             
             limpiar();
-            //crea la patente pero nose como actualizar las dropdownlist
+        
            
          
         }
@@ -48,8 +72,8 @@ namespace WebApplication10
         {
             Familia p = new Familia()
             {
-                Nombre = this.TextBox1.Text
-
+                Nombre = this.TextBox1.Text,
+                //Permiso = (Tipopatente)this.ddlpatentescompo.SelectedValue
             };
             GestorPatentes.guardarcomponente(p, true);
             
@@ -82,8 +106,19 @@ namespace WebApplication10
                 familias = flia.Hijos;
             }
 
-       
-         
+            TreeNode root = new TreeNode();//esto tiene q ir en los botones segun q sea
+            flia.Nombre = ComboBox1.SelectedItem.Text;
+            root.Value = flia.Nombre;
+            this.TreeView1.Nodes.Add(root);
+
+            foreach (var item in familias)
+            {
+                MostrarTreeView(root, item);
+                
+            }
+
+
+            TreeView1.ExpandAll();
         }//listado de familias
 
         int id=1;
@@ -98,74 +133,88 @@ namespace WebApplication10
        
 
        
-        public void fliacorrec()
+       
+        
+        
+
+        protected void Button1_Click(object sender, EventArgs e)// Esto es agregar
         {
-
-            id = int.Parse(patentes.SelectedValue.ToString());
-            flia.Id = id;
-
-            foreach (var item in GestorPatentes.GetAllFamilias())
+            //flia = new Familia();
+            flia.Id = int.Parse(ComboBox1.SelectedItem.Value);
+            if (flia!=null)
             {
-                if (item.Id == id)
+                var familia = new Familia { Nombre=ComboBox1.SelectedItem.Text};
+                if (familia!=null)
                 {
-                    flia.Nombre = item.Nombre;
-                    flia.Permiso = item.Permiso;
+                    var variable = GestorPatentes.Existe(flia, familia.Id);
 
+                    if (variable)
+                    {
+                        GestorPatentes.FillFamilyComponents(familia);
+                        flia.AgregarHijo(familia);
+                        MostrarFamilia(false);
+                    }
                 }
+
             }
-
-
         }
-        protected void patentes_SelectedIndexChanged(object sender, EventArgs e)
+
+        protected void btnagregarflia_Click(object sender, EventArgs e)///// esto configura la flia
         {
-            fliacorrec();
+            var tmp = new Familia { Nombre = ComboBox1.SelectedItem.Text,
+                                    Id=int.Parse(ComboBox1.SelectedItem.Value)
+                                  };
+            flia = new Familia();
+            flia.Id = tmp.Id;
+            flia.Nombre = tmp.Nombre;
+
             MostrarFamilia(true);
         }
 
-        public void patcorecc()
+        protected void BTNAGREGARPATENTE_Click(object sender, EventArgs e)
         {
-            int id2;
-            id2 = int.Parse(GridView1.SelectedValue.ToString());
-            pat.Id = id2;
-
-            foreach (var item in GestorPatentes.GetAllPatentes())
-            {
-                if (item.Id == id2)
-                {
-                    pat.Nombre = item.Nombre;
-                }
-            }
-        }
-        protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fliacorrec();
+            //flia = new Familia();
+            flia.Id = int.Parse(ComboBox1.SelectedItem.Value);
             if (flia != null)
             {
-                patcorecc();
+                
+                var pat= new Patente { Nombre = ComboBox2.SelectedItem.Text,
+                                       Id = int.Parse(ComboBox2.SelectedItem.Value)
+                                     };
                 if (pat != null)
                 {
-                    var esta = GestorPatentes.Existe(flia, pat.Id);
-                    if (esta)
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert(hfhfhfhf);</script>");
+                    var variable = GestorPatentes.Existe(flia, pat.Id);
+
+                    if (variable)
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('ya existe la patente indicada');</script>");
+
+
+                    
                     else
                     {
-
-                        {
-                            flia.AgregarHijo(pat);
-                            MostrarFamilia(false);
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert(hfhfhfhf);</script>");
-                        }
+                        flia.AgregarHijo(pat);
+                        
+                        MostrarFamilia(false);
                     }
                 }
-            }
-            
-            GestorPatentes.GuardarFamilia(flia);
 
+            }
         }
 
-        protected void Btnguardarflia1_Click(object sender, EventArgs e)
+        protected void Button1_Click1(object sender, EventArgs e)
         {
+            try
+            {                
+                flia.Id = int.Parse(ComboBox1.SelectedItem.Value);
+                var var = flia.Hijos;// no me trae los hijos de las familias
 
+                GestorPatentes.GuardarFamilia(flia);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

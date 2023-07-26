@@ -18,7 +18,7 @@ namespace DAL
             //cs.IntegratedSecurity = true;
             //cs.DataSource = ".";
             //cs.InitialCatalog = "MyCompany";
-            cs.ConnectionString = @"Data Source=DESKTOP-QI5JC7C\TOOM;Initial Catalog=TPMODELOS;Integrated Security=True";//revisar  base de datos
+            cs.ConnectionString = @"Data Source=DESKTOP-QI5JC7C\TOOM;Initial Catalog=TPHBH;Integrated Security=True";//revisar  base de datos
 
 
             return cs.ConnectionString;
