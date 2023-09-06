@@ -90,5 +90,29 @@ namespace BLL
             return pate.BuscarPermisos(patentes, u);
         }
 
+
+        public string pat_flia(BE.pat_flia_AUX pat_Flia_AUX)
+        {
+            string fa;
+            fa = pate.cargarUPF(pat_Flia_AUX);
+            return fa;
+        }
+
+        List<BE.pat_flia_AUX> patflia = new List<BE.pat_flia_AUX>();
+
+        public void agregar(BE.pat_flia_AUX patflias)
+        {
+            this.patflia.Add(patflias);
+        }
+
+        public void vaciar()
+        {
+            this.patflia = new List<BE.pat_flia_AUX>();
+        }
+        
+        public List<BE.pat_flia_AUX> listaraux()
+        {
+            return this.patflia;
+        }
     }
 }

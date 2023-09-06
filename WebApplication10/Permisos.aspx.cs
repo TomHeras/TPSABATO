@@ -14,13 +14,13 @@ namespace WebApplication10
         BLL.Patentes GestorPatentes = new BLL.Patentes();
         Familia flia=new Familia();
         Patente pat = new Patente();
-
+        BE.pat_flia_AUX permiaux = new BE.pat_flia_AUX();
 
         
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+          
         }
 
 
@@ -193,22 +193,31 @@ namespace WebApplication10
                     else
                     {
                         flia.AgregarHijo(pat);
-                        
+                        //agregar a una clase auxiliar o lista los hijos del treeview y pasarselos en guardar
+                        permiaux.Padre = flia.Id;
+                        Session["padre"] = permiaux.Padre;                        
+                        permiaux.Hijo = pat.Id;
+                        GestorPatentes.agregar(permiaux);
+                        Session["permisos"] = GestorPatentes.listaraux().ToString();
+                        /////////
                         MostrarFamilia(false);
                     }
                 }
 
             }
         }
-
+        
         protected void Button1_Click1(object sender, EventArgs e)
         {
+            int padre = 0, hijo = 0;
             try
             {                
                 flia.Id = int.Parse(ComboBox1.SelectedItem.Value);
                 var var = flia.Hijos;// no me trae los hijos de las familias
 
                 GestorPatentes.GuardarFamilia(flia);
+                
+                
             }
             catch (Exception)
             {

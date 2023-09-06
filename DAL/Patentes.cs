@@ -460,5 +460,16 @@ namespace DAL
                 familia.AgregarHijo(item);
             }
         }
+
+        public string cargarUPF(BE.pat_flia_AUX pat_Flia_)//int id_padre, int id_hijo
+        {
+            string fa ;
+            SqlParameter[] param = new SqlParameter[2];
+            param[0] = new SqlParameter("@id_padre",pat_Flia_.Padre);
+            param[0] = new SqlParameter("@id_hijo",pat_Flia_.Hijo);
+            fa = acceso.Escribir("pat_flia", param);
+
+            return fa;
+        }
     }
 }

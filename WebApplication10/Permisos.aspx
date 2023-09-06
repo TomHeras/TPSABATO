@@ -90,6 +90,14 @@
     <asp:TreeView ID="TreeView1" runat="server" BorderColor="#000066" BorderStyle="Solid">
     </asp:TreeView>
     <br />
+    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="ObjectDataSource4" Width="412px">
+        <Columns>
+            <asp:BoundField DataField="Padre" HeaderText="Padre" SortExpression="Padre" />
+            <asp:BoundField DataField="Hijo" HeaderText="Hijo" SortExpression="Hijo" />
+        </Columns>
+    </asp:GridView>
+    <asp:ObjectDataSource ID="ObjectDataSource4" runat="server" SelectMethod="listaraux" TypeName="BLL.Patentes"></asp:ObjectDataSource>
+    <br />
     <br />
     
     
